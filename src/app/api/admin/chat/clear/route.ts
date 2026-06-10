@@ -6,6 +6,8 @@ import { readdir, unlink } from 'fs/promises';
 import { join } from 'path';
 import { existsSync } from 'fs';
 
+export const dynamic = 'force-dynamic';
+
 export async function DELETE() {
   try {
     // 1. Session check

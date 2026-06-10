@@ -4,6 +4,8 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { broadcastMessage } from '@/lib/chatStream';
 
+export const dynamic = 'force-dynamic';
+
 // GET: Oxirgi 50 ta xabarni yuklash
 export async function GET() {
   try {
