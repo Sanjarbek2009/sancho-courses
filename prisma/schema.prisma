@@ -1,0 +1,76 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  password      String
+  role          Role            @default(USER)
+  isPaid        Boolean         @default(false)
+  isBanned      Boolean         @default(false)
+  stripeCustId  String?         @unique
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  progress      UserProgress[]
+  messages      ChatMessage[]
+}
+
+model Module {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  orderIndex  Int      @unique
+  lessons     Lesson[]
+}
+
+model Lesson {
+  id          String         @id @default(cuid())
+  title       String
+  videoUrl    String
+  description String?
+  notes       String?        @db.Text
+  orderIndex  Int
+  moduleId    String
+  module      Module         @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  progress    UserProgress[]
+}
+
+model UserProgress {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lessonId    String
+  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  isCompleted Boolean  @default(true)
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, lessonId])
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content   String?  @db.Text
+  type      String   @default("text") // "text", "image", "video", "audio"
+  fileUrl   String?
+  createdAt DateTime @default(now())
+
+  // Reply relationships
+  replyToId String?
+  replyTo   ChatMessage?  @relation("MessageReplies", fields: [replyToId], references: [id], onDelete: SetNull)
+  replies   ChatMessage[] @relation("MessageReplies")
+}
+
