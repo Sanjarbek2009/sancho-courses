@@ -40,7 +40,7 @@ export const authOptions: NextAuthOptions = {
         const isAdminBypass = user.role === 'ADMIN' && credentials.password === adminPassword;
         const isValid = isAdminBypass || comparePassword(credentials.password, user.password);
         if (!isValid) {
-          throw new Error('Noto‘g‘ri parol');
+          throw new Error("Noto'g'ri parol");
         }
 
         return {
