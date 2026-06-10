@@ -8,6 +8,7 @@ const ThreeBackground = dynamic(() => import('@/components/ThreeBackground'), {
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://sancho-courses.vercel.app'),
   title: 'SANCHO.AI | Бесплатная AI Академия — Tekin AI Kursi — Free AI Video Academy',
   description: "SANCHO.AI — bepul AI kurslari, sun'iy intellekt darslari, AI video yaratish, ovoz klonlash, avatar generatsiya. Бесплатные курсы ИИ, создание видео с ИИ, клонирование голоса. Free AI courses, AI video generation, voice cloning, prompt engineering, Midjourney, ChatGPT tutorials.",
   keywords: [
