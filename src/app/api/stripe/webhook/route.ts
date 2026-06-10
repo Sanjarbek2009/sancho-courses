@@ -4,6 +4,8 @@ import { stripe } from '@/lib/stripe';
 import { revalidatePath } from 'next/cache';
 import Stripe from 'stripe';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   if (!stripe) {
     return NextResponse.json({ error: 'Stripe is not configured' }, { status: 400 });
