@@ -547,6 +547,12 @@ export default function AdminDashboard() {
                     {`Kompyuterdan video yuklash`}
                   </label>
                   
+                  {typeof window !== 'undefined' && window.location.hostname !== 'localhost' && (
+                    <div className="p-3.5 rounded-xl border border-amber-500/20 bg-amber-950/15 text-amber-400 text-[10px] leading-relaxed font-medium">
+                      ⚠️ <strong>{`Vercel Serverless ogohlantirishi:`}</strong> {`Vercel tizimida katta video fayllarni to'g'ridan-to'g'ri yuklash cheklangan (maksimal 4.5 MB va server diskiga yozish yopiq). Videolarni YouTube (Unlisted/Private qilib) yoki Telegram kanalga MP4 qilib yuklab, tepadagi "Video havolasi" maydoniga linkini yozish tavsiya etiladi.`}
+                    </div>
+                  )}
+                  
                   <div className="relative border border-dashed border-white/10 rounded-xl p-4 flex flex-col items-center justify-center bg-black/35 hover:border-[#D4AF37]/50 transition-all duration-300">
                     <UploadCloud size={24} className="text-[#94A3B8] mb-2" />
                     <span className="text-[11px] text-[#94A3B8] text-center mb-1">{`Video faylni tanlang (MP4, WebM)`}</span>
