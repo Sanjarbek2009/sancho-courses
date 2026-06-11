@@ -8,7 +8,7 @@ const ThreeBackground = dynamic(() => import('@/components/ThreeBackground'), {
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://sancho-courses.vercel.app'),
+  metadataBase: new URL('https://sanchoai-courses.vercel.app'),
   title: 'SANCHO.AI | Бесплатная AI Академия — Tekin AI Kursi — Free AI Video Academy',
   description: "SANCHO.AI — bepul AI kurslari, sun'iy intellekt darslari, AI video yaratish, ovoz klonlash, avatar generatsiya. Бесплатные курсы ИИ, создание видео с ИИ, клонирование голоса. Free AI courses, AI video generation, voice cloning, prompt engineering, Midjourney, ChatGPT tutorials.",
   keywords: [
@@ -132,14 +132,14 @@ export const metadata: Metadata = {
     '#ЗаработокСИИ', '#ИИонлайн', '#ИИдляНачинающих', '#ИИРилс', '#ИИШортс',
     '#Нейросети', '#ИскусственныйИнтеллектКурс', '#БесплатныеНейросети',
   ],
-  authors: [{ name: 'SANCHO.AI Academy', url: 'https://sancho-courses.vercel.app' }],
+  authors: [{ name: 'SANCHO.AI Academy', url: 'https://sanchoai-courses.vercel.app' }],
   creator: 'SANCHO.AI',
   publisher: 'SANCHO.AI Academy',
   category: 'Education, Artificial Intelligence, Technology',
   openGraph: {
     title: 'SANCHO.AI | Бесплатная AI Академия — Tekin AI Kursi — Free AI Video Academy',
     description: "Bepul AI kurslari — sun'iy intellekt, video yaratish, ovoz klonlash. Бесплатные курсы ИИ. Free AI video course, voice cloning, avatar, prompt engineering.",
-    url: 'https://sancho-courses.vercel.app',
+    url: 'https://sanchoai-courses.vercel.app',
     siteName: 'SANCHO.AI Academy',
     images: [
       {
@@ -180,11 +180,11 @@ export const metadata: Metadata = {
     google: 'oaGGduOELJRqmZXkZPjuXmTiYICZeYZFLPH1KZyNETI',
   },
   alternates: {
-    canonical: 'https://sancho-courses.vercel.app',
+    canonical: 'https://sanchoai-courses.vercel.app',
     languages: {
-      'uz': 'https://sancho-courses.vercel.app',
-      'ru': 'https://sancho-courses.vercel.app',
-      'en': 'https://sancho-courses.vercel.app',
+      'uz': 'https://sanchoai-courses.vercel.app',
+      'ru': 'https://sanchoai-courses.vercel.app',
+      'en': 'https://sanchoai-courses.vercel.app',
     },
   },
 };
@@ -202,22 +202,22 @@ export default function RootLayout({
     '@graph': [
       {
         '@type': 'Organization',
-        '@id': 'https://sancho-courses.vercel.app/#organization',
+        '@id': 'https://sanchoai-courses.vercel.app/#organization',
         name: 'SANCHO.AI Academy',
-        url: 'https://sancho-courses.vercel.app',
-        logo: 'https://sancho-courses.vercel.app/logo.jpg',
+        url: 'https://sanchoai-courses.vercel.app',
+        logo: 'https://sanchoai-courses.vercel.app/logo.jpg',
         description: "Bepul AI kurslari, sun'iy intellekt darslari. Бесплатные курсы ИИ. Free AI courses.",
         sameAs: [],
       },
       {
         '@type': 'WebSite',
-        '@id': 'https://sancho-courses.vercel.app/#website',
-        url: 'https://sancho-courses.vercel.app',
+        '@id': 'https://sanchoai-courses.vercel.app/#website',
+        url: 'https://sanchoai-courses.vercel.app',
         name: 'SANCHO.AI Academy',
-        publisher: { '@id': 'https://sancho-courses.vercel.app/#organization' },
+        publisher: { '@id': 'https://sanchoai-courses.vercel.app/#organization' },
         potentialAction: {
           '@type': 'SearchAction',
-          target: 'https://sancho-courses.vercel.app/?q={search_term_string}',
+          target: 'https://sanchoai-courses.vercel.app/?q={search_term_string}',
           'query-input': 'required name=search_term_string',
         },
       },
@@ -229,9 +229,9 @@ export default function RootLayout({
         provider: {
           '@type': 'Organization',
           name: 'SANCHO.AI Academy',
-          sameAs: 'https://sancho-courses.vercel.app',
+          sameAs: 'https://sanchoai-courses.vercel.app',
         },
-        url: 'https://sancho-courses.vercel.app/course',
+        url: 'https://sanchoai-courses.vercel.app/course',
         courseLanguage: ['uz', 'ru', 'en'],
         isAccessibleForFree: true,
         hasCourseInstance: {

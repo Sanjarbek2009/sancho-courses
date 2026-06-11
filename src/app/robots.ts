@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/admin', '/api/'],
       },
     ],
-    sitemap: 'https://sancho-courses.vercel.app/sitemap.xml',
+    sitemap: 'https://sanchoai-courses.vercel.app/sitemap.xml',
   };
 }
