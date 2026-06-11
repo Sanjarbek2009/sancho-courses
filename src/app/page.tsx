@@ -414,11 +414,11 @@ export default function LandingPage() {
             </button>
 
             {/* Certificate Image */}
-            <div className="w-full overflow-auto flex justify-center items-center rounded-2xl">
+            <div className="w-full flex justify-center items-center rounded-2xl p-2">
               <img
                 src="/certificate.png"
                 alt="Google Coursera Sertifikati"
-                className="max-h-[80vh] w-auto object-contain rounded-xl shadow-lg border border-white/5"
+                className="w-full max-w-full h-auto md:w-auto md:max-h-[75vh] object-contain rounded-xl shadow-lg border border-white/5"
               />
             </div>
           </div>
