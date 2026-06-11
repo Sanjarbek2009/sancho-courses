@@ -6,6 +6,14 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Sidebar from '@/components/Sidebar';
 
+interface Lesson {
+  id: string;
+}
+
+interface Module {
+  lessons: Lesson[];
+}
+
 export default function CoursePage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -22,9 +30,10 @@ export default function CoursePage() {
         }
         throw new Error('Unauthorized');
       })
-      .then((modules) => {
-        if (modules && modules.length > 0 && modules[0].lessons && modules[0].lessons.length > 0) {
-          const firstLessonId = modules[0].lessons[0].id;
+      .then((modules: Module[]) => {
+        const activeModule = modules?.find((m) => m.lessons && m.lessons.length > 0);
+        if (activeModule) {
+          const firstLessonId = activeModule.lessons[0].id;
           router.replace(`/course/${firstLessonId}`);
         } else {
           setLoading(false);
