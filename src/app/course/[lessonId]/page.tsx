@@ -282,10 +282,10 @@ export default function LessonDetailPage() {
             <h3 className="text-sm font-bold uppercase tracking-wider text-[#94A3B8] px-2">{`Kurs Mundarijasi`}</h3>
             
             <div className="flex flex-col gap-2 max-h-[70vh] overflow-y-auto pr-1">
-              {modules.map((mod) => (
+              {modules.filter(mod => mod.lessons && mod.lessons.length > 0).map((mod, index) => (
                 <div key={mod.id} className="flex flex-col gap-1.5">
                   <div className="p-2.5 rounded-xl bg-white/[0.02] border border-white/5">
-                    <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-wide">{`Modul `}{mod.orderIndex}</span>
+                    <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-wide">{`Modul `}{index + 1}</span>
                     <h4 className="font-bold text-xs text-white line-clamp-1 mt-0.5">{mod.title}</h4>
                   </div>
                   
