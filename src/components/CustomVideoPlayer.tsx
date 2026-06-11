@@ -52,7 +52,7 @@ export default function CustomVideoPlayer({ videoUrl, onEnded }: CustomVideoPlay
     if (match && match[2].length === 11) {
       videoId = match[2];
     }
-    return `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&controls=1`;
+    return `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1`;
   };
 
   const getVimeoEmbedUrl = (url: string) => {
@@ -126,7 +126,7 @@ export default function CustomVideoPlayer({ videoUrl, onEnded }: CustomVideoPlay
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
 
-  // If YouTube: render native embed with top safety overlay and auto-advance button
+  // If YouTube: render native embed with sandbox protection and top safety overlay
   if (isYouTube) {
     return (
       <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black">
@@ -134,6 +134,7 @@ export default function CustomVideoPlayer({ videoUrl, onEnded }: CustomVideoPlay
           src={getYouTubeEmbedUrl(videoUrl)}
           title="YouTube Video Player"
           className="w-full h-full border-0"
+          sandbox="allow-scripts allow-same-origin allow-presentation"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
         />
