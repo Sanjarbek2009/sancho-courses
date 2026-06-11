@@ -31,8 +31,8 @@ export default function CustomVideoPlayer({ videoUrl, onEnded }: CustomVideoPlay
   const [playbackRate, setPlaybackRate] = useState(1);
   const [showControls, setShowControls] = useState(true);
 
-  const isYouTube = videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be');
-  const isVimeo = videoUrl.includes('vimeo.com');
+  const isYouTube = videoUrl && (videoUrl.toLowerCase().includes('youtube.com') || videoUrl.toLowerCase().includes('youtu.be'));
+  const isVimeo = videoUrl && videoUrl.toLowerCase().includes('vimeo.com');
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
@@ -66,15 +66,11 @@ export default function CustomVideoPlayer({ videoUrl, onEnded }: CustomVideoPlay
   }, [isYouTube, isPlaying, ytPlayer]);
 
   const getYouTubeVideoId = (url: string) => {
-    let videoId = '';
-    if (url.includes('youtu.be/')) {
-      videoId = url.split('youtu.be/')[1]?.split('?')[0];
-    } else if (url.includes('v=')) {
-      videoId = url.split('v=')[1]?.split('&')[0];
-    } else if (url.includes('embed/')) {
-      videoId = url.split('embed/')[1]?.split('?')[0];
-    }
-    return videoId;
+    if (!url) return '';
+    const cleanUrl = url.trim();
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/|live\/)([^#\&\?]*).*/;
+    const match = cleanUrl.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : '';
   };
 
   // Handle YouTube Player lifecycle
@@ -82,6 +78,7 @@ export default function CustomVideoPlayer({ videoUrl, onEnded }: CustomVideoPlay
     if (!isYouTube) return;
 
     let player: any = null;
+    let pollInterval: NodeJS.Timeout;
 
     const initPlayer = () => {
       const videoId = getYouTubeVideoId(videoUrl);
@@ -127,26 +124,39 @@ export default function CustomVideoPlayer({ videoUrl, onEnded }: CustomVideoPlay
       });
     };
 
-    if (window.YT && window.YT.Player) {
-      initPlayer();
-    } else {
-      // If the API script is not loaded, check if it's already added to document
+    const checkAndInit = () => {
+      if (window.YT && window.YT.Player) {
+        initPlayer();
+        return true;
+      }
+      return false;
+    };
+
+    if (!checkAndInit()) {
       const existingTag = document.querySelector('script[src="https://www.youtube.com/iframe_api"]');
       if (!existingTag) {
         const tag = document.createElement('script');
         tag.src = 'https://www.youtube.com/iframe_api';
         const firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
-      }
 
-      const previousCallback = window.onYouTubeIframeAPIReady;
-      window.onYouTubeIframeAPIReady = () => {
-        if (previousCallback) previousCallback();
-        initPlayer();
-      };
+        const previousCallback = window.onYouTubeIframeAPIReady;
+        window.onYouTubeIframeAPIReady = () => {
+          if (previousCallback) previousCallback();
+          initPlayer();
+        };
+      } else {
+        // Script tag exists but YT is not ready yet, poll for it
+        pollInterval = setInterval(() => {
+          if (checkAndInit()) {
+            clearInterval(pollInterval);
+          }
+        }, 100);
+      }
     }
 
     return () => {
+      if (pollInterval) clearInterval(pollInterval);
       if (player && typeof player.destroy === 'function') {
         try {
           player.destroy();
@@ -177,6 +187,7 @@ export default function CustomVideoPlayer({ videoUrl, onEnded }: CustomVideoPlay
   }, []);
 
   const getVimeoEmbedUrl = (url: string) => {
+    if (!url) return '';
     const parts = url.split('/');
     const videoId = parts[parts.length - 1]?.split('?')[0];
     return `https://player.vimeo.com/video/${videoId}?autoplay=1`;
