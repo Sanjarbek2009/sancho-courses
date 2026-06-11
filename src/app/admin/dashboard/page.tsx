@@ -549,7 +549,7 @@ export default function AdminDashboard() {
                   
                   {typeof window !== 'undefined' && window.location.hostname !== 'localhost' && (
                     <div className="p-3.5 rounded-xl border border-amber-500/20 bg-amber-950/15 text-amber-400 text-[10px] leading-relaxed font-medium">
-                      ⚠️ <strong>{`Vercel Serverless ogohlantirishi:`}</strong> {`Vercel tizimida katta video fayllarni to'g'ridan-to'g'ri yuklash cheklangan (maksimal 4.5 MB va server diskiga yozish yopiq). Videolarni YouTube (Unlisted/Private qilib) yoki Telegram kanalga MP4 qilib yuklab, tepadagi "Video havolasi" maydoniga linkini yozish tavsiya etiladi.`}
+                      ⚠️ <strong>{`Vercel Serverless ogohlantirishi:`}</strong> {`Vercel tizimida katta video fayllarni to'g'ridan-to'g'ri yuklash cheklangan (maksimal 4.5 MB va server diskiga yozish yopiq). Videolarni YouTube'ga (Unlisted qilib) yuklab, tepadagi "Video havolasi" maydoniga linkini yozish tavsiya etiladi. Saytimizdagi video player YouTube havolasini shaffof himoya qatlami bilan to'liq yopib ko'rsatadi, bu esa talabalarga YouTube silkasini ko'rish yoki nusxalash imkonini bermaydi (100% bepul va xavfsiz).`}
                     </div>
                   )}
                   
