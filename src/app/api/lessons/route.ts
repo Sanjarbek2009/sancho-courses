@@ -2,6 +2,7 @@ import { NextResponse, NextRequest } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import { encryptVideoUrl } from '@/lib/security';
 
 export const dynamic = 'force-dynamic';
 
@@ -36,12 +37,24 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json(modules);
+    const isAdmin = dbUser?.role === 'ADMIN';
+
+    // Talabalar uchun videoUrl shifrlanadi, adminlar uchun ochiq qoladi
+    const processedModules = modules.map((mod) => ({
+      ...mod,
+      lessons: mod.lessons.map((les) => ({
+        ...les,
+        videoUrl: isAdmin ? les.videoUrl : encryptVideoUrl(les.videoUrl),
+      })),
+    }));
+
+    return NextResponse.json(processedModules);
   } catch (err) {
     const errMsg = err instanceof Error ? err.message : 'Internal Server Error';
     return NextResponse.json({ error: errMsg }, { status: 500 });
   }
 }
+
 
 export async function POST(req: NextRequest) {
   try {

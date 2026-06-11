@@ -4,6 +4,8 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import { Play, Pause, Volume2, VolumeX, Maximize, FastForward, Settings } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { decryptVideoUrl } from '@/lib/security';
 
 interface CustomVideoPlayerProps {
   videoUrl: string;
@@ -22,6 +24,10 @@ export default function CustomVideoPlayer({ videoUrl, onEnded }: CustomVideoPlay
   const containerRef = useRef<HTMLDivElement>(null);
   const ytPlayerId = useRef(`yt-player-${Math.random().toString(36).substring(2, 11)}`);
 
+  const { data: session } = useSession();
+  const isAdminUser = session?.user?.role === 'ADMIN';
+  const [isSecure, setIsSecure] = useState(true);
+
   const [ytPlayer, setYtPlayer] = useState<any>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -31,8 +37,44 @@ export default function CustomVideoPlayer({ videoUrl, onEnded }: CustomVideoPlay
   const [playbackRate, setPlaybackRate] = useState(1);
   const [showControls, setShowControls] = useState(true);
 
-  const isYouTube = videoUrl && (videoUrl.toLowerCase().includes('youtube.com') || videoUrl.toLowerCase().includes('youtu.be'));
-  const isVimeo = videoUrl && videoUrl.toLowerCase().includes('vimeo.com');
+  // Video havolasini on-the-fly deshifrlash
+  const decryptedUrl = React.useMemo(() => {
+    return decryptVideoUrl(videoUrl);
+  }, [videoUrl]);
+
+  const isYouTube = decryptedUrl && (decryptedUrl.toLowerCase().includes('youtube.com') || decryptedUrl.toLowerCase().includes('youtu.be'));
+  const isVimeo = decryptedUrl && decryptedUrl.toLowerCase().includes('vimeo.com');
+
+  // Player ichida qo'shimcha DevTools detektori
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    if (isLocalhost || isAdminUser) return;
+
+    const check = () => {
+      const threshold = 160;
+      const widthDev = window.outerWidth - window.innerWidth > threshold;
+      const heightDev = window.outerHeight - window.innerHeight > threshold;
+      
+      if (widthDev || heightDev) {
+        setIsSecure(false);
+        window.location.replace('about:blank');
+        return;
+      }
+
+      const t0 = performance.now();
+      // eslint-disable-next-line no-debugger
+      debugger;
+      const t1 = performance.now();
+      if (t1 - t0 > 100) {
+        setIsSecure(false);
+        window.location.replace('about:blank');
+      }
+    };
+
+    const interval = setInterval(check, 500);
+    return () => clearInterval(interval);
+  }, [isAdminUser]);
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
@@ -50,7 +92,7 @@ export default function CustomVideoPlayer({ videoUrl, onEnded }: CustomVideoPlay
       setIsPlaying(false);
       setCurrentTime(0);
     }
-  }, [videoUrl]);
+  }, [decryptedUrl]);
 
   // Sync state for YouTube video progress
   useEffect(() => {
@@ -81,7 +123,7 @@ export default function CustomVideoPlayer({ videoUrl, onEnded }: CustomVideoPlay
     let pollInterval: NodeJS.Timeout;
 
     const initPlayer = () => {
-      const videoId = getYouTubeVideoId(videoUrl);
+      const videoId = getYouTubeVideoId(decryptedUrl);
       if (!videoId) return;
 
       player = new window.YT.Player(ytPlayerId.current, {
@@ -165,8 +207,7 @@ export default function CustomVideoPlayer({ videoUrl, onEnded }: CustomVideoPlay
       }
       setYtPlayer(null);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isYouTube, videoUrl]);
+  }, [isYouTube, decryptedUrl]);
 
   // Context Menu blocker on container
   useEffect(() => {
@@ -300,11 +341,19 @@ export default function CustomVideoPlayer({ videoUrl, onEnded }: CustomVideoPlay
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
 
+  if (!isSecure) {
+    return (
+      <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-red-500/30 bg-[#050505] flex items-center justify-center">
+        <p className="text-sm text-red-500 font-bold tracking-wider">{"Xavfsizlik sababli video to'xtatildi."}</p>
+      </div>
+    );
+  }
+
   if (isVimeo) {
     return (
       <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black">
         <iframe
-          src={getVimeoEmbedUrl(videoUrl)}
+          src={getVimeoEmbedUrl(decryptedUrl)}
           title="Vimeo Video Player"
           className="w-full h-full border-0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -339,7 +388,7 @@ export default function CustomVideoPlayer({ videoUrl, onEnded }: CustomVideoPlay
       ) : (
         <video
           ref={videoRef}
-          src={videoUrl || 'https://assets.mixkit.co/videos/preview/mixkit-stars-in-space-background-1611-large.mp4'}
+          src={decryptedUrl || 'https://assets.mixkit.co/videos/preview/mixkit-stars-in-space-background-1611-large.mp4'}
           className="w-full h-full object-cover cursor-pointer"
           onClick={handlePlayPause}
           onTimeUpdate={handleTimeUpdate}
