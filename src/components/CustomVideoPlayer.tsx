@@ -39,6 +39,7 @@ export default function CustomVideoPlayer({ videoUrl, onEnded }: CustomVideoPlay
   }, [videoUrl]);
 
   const isYouTube = videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be');
+  const isVimeo = videoUrl.includes('vimeo.com');
   
   const getYouTubeEmbedUrl = (url: string) => {
     let videoId = '';
@@ -50,6 +51,12 @@ export default function CustomVideoPlayer({ videoUrl, onEnded }: CustomVideoPlay
       videoId = url.split('embed/')[1]?.split('?')[0];
     }
     return `https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1`;
+  };
+
+  const getVimeoEmbedUrl = (url: string) => {
+    const parts = url.split('/');
+    const videoId = parts[parts.length - 1]?.split('?')[0];
+    return `https://player.vimeo.com/video/${videoId}?autoplay=1`;
   };
 
   const handlePlayPause = () => {
@@ -121,6 +128,29 @@ export default function CustomVideoPlayer({ videoUrl, onEnded }: CustomVideoPlay
         <iframe
           src={getYouTubeEmbedUrl(videoUrl)}
           title="YouTube Video Player"
+          className="w-full h-full"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+        <div className="absolute top-4 right-4 z-10">
+          <button
+            onClick={onEnded}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#6366F1]/80 hover:bg-[#6366F1] text-white text-xs font-semibold backdrop-blur-md transition-all duration-300 shadow-lg"
+          >
+            <FastForward size={14} />
+            Darsni Yakunlash (Auto-Advance)
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (isVimeo) {
+    return (
+      <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black">
+        <iframe
+          src={getVimeoEmbedUrl(videoUrl)}
+          title="Vimeo Video Player"
           className="w-full h-full"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
