@@ -177,7 +177,7 @@ export const metadata: Metadata = {
     apple: '/logo.jpg',
   },
   verification: {
-    google: 'sancho-ai-academy',
+    google: 'oaGGduOELJRqmZXkZPjuXmTiYICZeYZFLPH1KZyNETI',
   },
   alternates: {
     canonical: 'https://sancho-courses.vercel.app',
