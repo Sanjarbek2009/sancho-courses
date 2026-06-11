@@ -1,7 +1,7 @@
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import prisma from './prisma';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 export function hashPassword(password: string): string {
   return bcrypt.hashSync(password, 10);
@@ -65,14 +65,19 @@ export const authOptions: NextAuthOptions = {
 
       // Re-validate session dynamically on update trigger or route change
       if (trigger === 'update' || (token?.id && typeof token.id === 'string')) {
-        const dbUser = await prisma.user.findUnique({
-          where: { id: token.id as string },
-          select: { role: true, isPaid: true, isBanned: true },
-        });
-        if (dbUser) {
-          token.role = dbUser.role;
-          token.isPaid = dbUser.isPaid;
-          token.isBanned = dbUser.isBanned;
+        try {
+          const dbUser = await prisma.user.findUnique({
+            where: { id: token.id as string },
+            select: { role: true, isPaid: true, isBanned: true },
+          });
+          if (dbUser) {
+            token.role = dbUser.role;
+            token.isPaid = dbUser.isPaid;
+            token.isBanned = dbUser.isBanned;
+          }
+        } catch (error) {
+          console.error("NextAuth JWT callback database query failed:", error);
+          // Fallback: don't crash the session, keep existing token data
         }
       }
 
