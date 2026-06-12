@@ -14,7 +14,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     }
 
     const lessonId = params.id;
-    const { title, videoUrl, description, notes, orderIndex, moduleTitle } = await req.json();
+    const { title, videoUrl, description, notes, homework, orderIndex, moduleTitle } = await req.json();
 
     const lesson = await prisma.lesson.findUnique({
       where: { id: lessonId },
@@ -50,6 +50,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
         videoUrl: videoUrl !== undefined ? videoUrl : lesson.videoUrl,
         description: description !== undefined ? description : lesson.description,
         notes: notes !== undefined ? notes : lesson.notes,
+        homework: homework !== undefined ? homework : lesson.homework,
         orderIndex: orderIndex !== undefined ? parseInt(orderIndex) : lesson.orderIndex,
         moduleId,
       },

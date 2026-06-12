@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
-    const { title, videoUrl, description, notes, orderIndex, moduleTitle, moduleDescription } = await req.json();
+    const { title, videoUrl, description, notes, homework, orderIndex, moduleTitle, moduleDescription } = await req.json();
 
     if (!title || !videoUrl || !moduleTitle) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -91,6 +91,7 @@ export async function POST(req: NextRequest) {
         videoUrl,
         description: description || '',
         notes: notes || '',
+        homework: homework || '',
         orderIndex: parseInt(orderIndex) || 0,
         moduleId: courseModule.id,
       },

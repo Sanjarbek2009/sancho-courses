@@ -17,6 +17,7 @@ interface Lesson {
   videoUrl: string;
   description: string;
   notes: string;
+  homework?: string;
   orderIndex: number;
   moduleId: string;
 }
@@ -267,7 +268,7 @@ export default function LessonDetailPage() {
                     <div className="flex flex-col gap-1">
                       <h4 className="font-semibold text-white text-xs">{`Amaliy vazifa:`}</h4>
                       <p className="text-xs">
-                        {`Darsda olingan AI modellaridan foydalanib o'z sohangiz bo'yicha 15 soniyalik qisqa video yarating, montaj qiling va natijani hamjamiyat kanaliga yuboring.`}
+                        {activeLesson.homework || `Darsda olingan AI modellaridan foydalanib o'z sohangiz bo'yicha 15 soniyalik qisqa video yarating, montaj qiling va natijani hamjamiyat kanaliga yuboring.`}
                       </p>
                     </div>
                   </div>

@@ -14,6 +14,7 @@ interface Lesson {
   videoUrl: string;
   description: string;
   notes: string;
+  homework?: string;
   orderIndex: number;
   moduleId: string;
   module: {
@@ -47,6 +48,7 @@ interface ModuleResponse {
     videoUrl: string;
     description: string;
     notes: string;
+    homework?: string;
     orderIndex: number;
     moduleId: string;
   }[];
@@ -72,6 +74,7 @@ export default function AdminDashboard() {
   const [videoUrl, setVideoUrl] = useState('');
   const [description, setDescription] = useState('');
   const [notes, setNotes] = useState('');
+  const [homework, setHomework] = useState('');
   const [orderIndex, setOrderIndex] = useState('1');
   const [moduleTitle, setModuleTitle] = useState('');
   const [formError, setFormError] = useState('');
@@ -149,6 +152,7 @@ export default function AdminDashboard() {
     setVideoUrl(lesson.videoUrl);
     setDescription(lesson.description || '');
     setNotes(lesson.notes || '');
+    setHomework(lesson.homework || '');
     setOrderIndex(lesson.orderIndex.toString());
     setModuleTitle(lesson.module.title);
     setFormError('');
@@ -162,6 +166,7 @@ export default function AdminDashboard() {
     setVideoUrl('');
     setDescription('');
     setNotes('');
+    setHomework('');
     setOrderIndex('1');
     setModuleTitle('');
     setFormError('');
@@ -184,6 +189,7 @@ export default function AdminDashboard() {
       videoUrl,
       description,
       notes,
+      homework,
       orderIndex: parseInt(orderIndex) || 1,
       moduleTitle
     };
@@ -604,6 +610,17 @@ export default function AdminDashboard() {
                     onChange={(e) => setNotes(e.target.value)}
                     placeholder="1. Prompt: /imagine prompt...&#10;2. Hook: ..."
                     className="w-full px-4 py-3 bg-[#050505] border border-white/10 rounded-xl text-xs text-white placeholder-white/20 focus:outline-none focus:border-[#D4AF37] transition-all font-mono"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[10px] font-bold uppercase text-[#94A3B8] tracking-wider">{`Dars Vazifasi (Homework)`}</label>
+                  <textarea
+                    rows={4}
+                    value={homework}
+                    onChange={(e) => setHomework(e.target.value)}
+                    placeholder="Darsda olingan bilimlardan foydalanib..."
+                    className="w-full px-4 py-3 bg-[#050505] border border-white/10 rounded-xl text-xs text-white placeholder-white/20 focus:outline-none focus:border-[#D4AF37] transition-all"
                   />
                 </div>
 

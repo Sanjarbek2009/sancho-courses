@@ -42,6 +42,7 @@ model Lesson {
   videoUrl    String
   description String?
   notes       String?        @db.Text
+  homework    String?        @db.Text
   orderIndex  Int
   moduleId    String
   module      Module         @relation(fields: [moduleId], references: [id], onDelete: Cascade)
